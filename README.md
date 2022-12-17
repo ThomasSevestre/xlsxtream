@@ -67,15 +67,6 @@ xlsx.write_worksheet(name: 'SheetWithSST', use_shared_strings: true) do |sheet|
   sheet << ['old', 'the', 'same', 'story']
 end
 
-# Strings in numeric or date/time format can be auto-detected and formatted
-# appropriately. This is a convenient way to avoid an Excel-warning about
-# "Number stored as text". Dates and times must be in the ISO-8601 format and
-# numeric values must contain only numbers and an optional decimal separator.
-# The strings true and false are detected as boolean values.
-xlsx.write_worksheet(name: 'SheetWithAutoFormat', auto_format: true) do |sheet|
-  # these two rows will be identical in the xlsx-output
-  sheet << [true, 11.85, DateTime.parse('2050-01-01T12:00'), Date.parse('1984-01-01')]
-  sheet << ['true', '11.85', '2050-01-01T12:00', '1984-01-01']
 end
 
 # You can also create worksheet without a block, using the `add_worksheet` method.

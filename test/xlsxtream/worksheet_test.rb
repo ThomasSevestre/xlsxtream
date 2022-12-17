@@ -44,19 +44,6 @@ module Xlsxtream
       assert_equal expected, io.string
     end
 
-    def test_add_row_with_auto_format_option
-      io = StringIO.new
-      ws = Worksheet.new(io, :auto_format => true)
-      ws << ['1.5']
-      ws.close
-      expected = \
-        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'"\r\n" \
-        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetData>' \
-          '<row r="1"><c r="A1" t="n"><v>1.5</v></c></row>' \
-        '</sheetData></worksheet>'
-      assert_equal expected, io.string
-    end
-
     def test_add_columns_via_worksheet_options
       io = StringIO.new
       ws = Worksheet.new(io, { :columns => [ {}, {}, { :width_pixels => 42 } ] } )

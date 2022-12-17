@@ -1,29 +1,29 @@
 class Object
-  def to_xslx_value(cid, _, sst)
-    to_s.to_xslx_value(cid, false, sst)
+  def to_xslx_value(cid, sst)
+    to_s.to_xslx_value(cid, sst)
   end
 end
 
 class Numeric
-  def to_xslx_value(cid, _, _)
+  def to_xslx_value(cid, _)
     %Q{<c r="#{cid}" t="n"><v>#{self}</v></c>}
   end
 end
 
 class TrueClass
-  def to_xslx_value(cid, _, _)
+  def to_xslx_value(cid, _)
     %Q{<c r="#{cid}" t="b"><v>1</v></c>}
   end
 end
 
 class FalseClass
-  def to_xslx_value(cid, _, _)
+  def to_xslx_value(cid, _)
     %Q{<c r="#{cid}" t="b"><v>0</v></c>}
   end
 end
 
 class Time
-  def to_xslx_value(cid, _, _)
+  def to_xslx_value(cid, _)
     # Local dates are stored as UTC by truncating the offset:
     # 1970-01-01 00:00:00 +0200 => 1970-01-01 00:00:00 UTC
     # This is done because SpreadsheetML is not timezone aware.
@@ -34,7 +34,7 @@ class Time
 end
 
 class DateTime
-  def to_xslx_value(cid, _, _)
+  def to_xslx_value(cid, _)
     _, jd, df, sf, of = marshal_dump
     oa_date = jd - 2415019 + (df + of + sf / 1e9) / 86400
 
@@ -44,12 +44,12 @@ end
 
 class Date
   if RUBY_ENGINE == 'ruby'
-    def to_xslx_value(cid, _, _)
+    def to_xslx_value(cid, _)
       oa_date = (jd - 2415019).to_f
       %Q{<c r="#{cid}" s="#{Xlsxtream::Row::DATE_STYLE}"><v>#{oa_date}</v></c>}
     end
   else
-    def to_xslx_value(cid, _, _)
+    def to_xslx_value(cid, _)
       oa_date = jd - 2415019 + (hour * 3600 + sec + sec_fraction.to_f) / 86400
       %Q{<c r="#{cid}" s="#{Xlsxtream::Row::DATE_STYLE}"><v>#{oa_date}</v></c>}
     end
@@ -57,11 +57,9 @@ class Date
 end
 
 class String
-  def to_xslx_value(cid, auto_format, sst)
+  def to_xslx_value(cid, sst)
     if empty?
       ""
-    elsif auto_format
-      Xlsxtream::Row.auto_format(self).to_xslx_value(cid, false, sst)
     else
       if encoding != Xlsxtream::Row::ENCODING
         value = encode(Xlsxtream::Row::ENCODING)
