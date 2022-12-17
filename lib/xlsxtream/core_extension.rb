@@ -76,6 +76,18 @@ class String
   end
 end
 
+class Symbol
+  def to_xslx_value(cid, sst)
+    if encoding != Xlsxtream::Row::ENCODING
+      value = to_s.encode(Xlsxtream::Row::ENCODING)
+    else
+      value = name
+    end
+
+    %Q{<c r="#{cid}" t="s"><v>#{sst[value]}</v></c>}
+  end
+end
+
 module Xlsxtream
   class SharedString < ::String
     def to_xslx_value(cid, sst)
