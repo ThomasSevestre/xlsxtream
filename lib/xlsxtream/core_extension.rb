@@ -57,6 +57,10 @@ class Date
 end
 
 class String
+  def xlsx_safe_string
+    Xlsxtream::SafeString.new(self)
+  end
+
   def xlsx_shared_string
     Xlsxtream::SharedString.new(self)
   end
@@ -89,6 +93,12 @@ class Symbol
 end
 
 module Xlsxtream
+  class SafeString < ::String
+    def to_xslx_value(cid, _)
+      %Q{<c r="#{cid}" t="inlineStr"><is><t>#{self}</t></is></c>}
+    end
+  end
+
   class SharedString < ::String
     def to_xslx_value(cid, sst)
       if empty?
@@ -105,3 +115,4 @@ module Xlsxtream
     end
   end
 end
+
