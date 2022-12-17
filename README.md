@@ -61,12 +61,25 @@ end
 # for the workbook or a single worksheet. The SST has to be kept in memory,
 # so do not use it if you have a huge amount of rows or a little duplication
 # of content across cells. A single SST is used for the whole workbook.
-xlsx.write_worksheet(name: 'SheetWithSST', use_shared_strings: true) do |sheet|
-  sheet << ['the', 'same', 'old', 'story']
-  sheet << ['the', 'old', 'same', 'story']
-  sheet << ['old', 'the', 'same', 'story']
-end
-
+xlsx.write_worksheet(name: 'SheetWithSST') do |sheet|
+  sheet << [
+    'the'.xlsx_shared_string,
+    'same'.xlsx_shared_string,
+    'old'.xlsx_shared_string,
+    'story1'
+  ]
+  sheet << [
+    'the'.xlsx_shared_string,
+    'old'.xlsx_shared_string,
+    'same'.xlsx_shared_string,
+    'story2'
+  ]
+  sheet << [
+    'old'.xlsx_shared_string,
+    'the'.xlsx_shared_string,
+    'same'.xlsx_shared_string,
+    'story3'
+  ]
 end
 
 # You can also create worksheet without a block, using the `add_worksheet` method.

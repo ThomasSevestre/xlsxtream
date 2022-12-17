@@ -153,8 +153,8 @@ module Xlsxtream
     def test_workbook_with_sst
       iow_spy = io_wrapper_spy
       Workbook.open(iow_spy) do |wb|
-        wb.write_worksheet(nil, use_shared_strings: true) do |ws|
-          ws << ['foo']
+        wb.write_worksheet(nil) do |ws|
+          ws << ['foo'.xlsx_shared_string]
         end
       end
       expected = {
@@ -297,7 +297,7 @@ module Xlsxtream
     def test_write_unnamed_worksheet_with_options
       iow_spy = io_wrapper_spy
       Workbook.open(iow_spy) do |wb|
-        wb.write_worksheet(:use_shared_strings => true)
+        wb.write_worksheet
       end
 
       expected = \

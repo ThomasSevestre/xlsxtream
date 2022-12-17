@@ -34,7 +34,7 @@ module Xlsxtream
       io = StringIO.new
       mock_sst = { 'foo' => 0 }
       ws = Worksheet.new(io, :sst => mock_sst)
-      ws << ['foo']
+      ws << ['foo'.xlsx_shared_string]
       ws.close
       expected = \
         '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'"\r\n" \

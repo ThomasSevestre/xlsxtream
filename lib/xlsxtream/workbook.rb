@@ -101,9 +101,7 @@ module Xlsxtream
         name = nil
       end
 
-      use_sst = options.fetch(:use_shared_strings, @options[:use_shared_strings])
       columns = options.fetch(:columns, @options[:columns])
-      sst = use_sst ? @sst : nil
 
       sheet_id = @worksheets.size + 1
       name = name || options[:name] || "Sheet#{sheet_id}"

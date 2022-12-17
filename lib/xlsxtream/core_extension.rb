@@ -57,6 +57,10 @@ class Date
 end
 
 class String
+  def xlsx_shared_string
+    Xlsxtream::SharedString.new(self)
+  end
+
   def to_xslx_value(cid, sst)
     if empty?
       ""
@@ -67,10 +71,24 @@ class String
         value = self
       end
 
-      if sst
-        %Q{<c r="#{cid}" t="s"><v>#{sst[value]}</v></c>}
+      %Q{<c r="#{cid}" t="inlineStr"><is><t>#{Xlsxtream::XML.escape_value(value)}</t></is></c>}
+    end
+  end
+end
+
+module Xlsxtream
+  class SharedString < ::String
+    def to_xslx_value(cid, sst)
+      if empty?
+        ""
       else
-        %Q{<c r="#{cid}" t="inlineStr"><is><t>#{Xlsxtream::XML.escape_value(value)}</t></is></c>}
+        if encoding != Xlsxtream::Row::ENCODING
+          value = encode(Xlsxtream::Row::ENCODING)
+        else
+          value = self
+        end
+
+        %Q{<c r="#{cid}" t="s"><v>#{sst[value]}</v></c>}
       end
     end
   end

@@ -19,8 +19,9 @@ module Xlsxtream
     end
 
     def test_symbol_column
-      row = Row.new([:hello], 1)
-      expected = '<row r="1"><c r="A1" t="inlineStr"><is><t>hello</t></is></c></row>'
+      mock_sst = { 'hello' => 0 }
+      row = Row.new([:hello], 1, :sst => mock_sst)
+      expected = '<row r="1"><c r="A1" t="s"><v>0</v></c></row>'
       actual = row.to_xml
       assert_equal expected, actual
     end
@@ -73,7 +74,7 @@ module Xlsxtream
 
     def test_string_column_with_shared_string_table
       mock_sst = { 'hello' => 0 }
-      row = Row.new(['hello'], 1, :sst => mock_sst)
+      row = Row.new(['hello'.xlsx_shared_string], 1, :sst => mock_sst)
       expected = '<row r="1"><c r="A1" t="s"><v>0</v></c></row>'
       actual = row.to_xml
       assert_equal expected, actual
